@@ -1,13 +1,25 @@
 import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
 import {StyleSheet} from 'react-native';
+import {Provider, useSelector} from 'react-redux';
+import {Loading} from './components';
+import store from './redux/store';
 import Router from './router';
 
-const App = () => {
+const MainApp = () => {
+  const {isLoading} = useSelector(state => state.globalReducer);
   return (
     <NavigationContainer>
       <Router />
+      {isLoading && <Loading />}
     </NavigationContainer>
+  );
+};
+const App = () => {
+  return (
+    <Provider store={store}>
+      <MainApp />
+    </Provider>
   );
 };
 
