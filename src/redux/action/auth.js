@@ -2,7 +2,7 @@ import {useState} from 'react';
 import Axios from 'axios';
 import {useSelector} from 'react-redux';
 import {API_HOST} from '../../config';
-import {getData, storeData} from '../../utils';
+import {getData, storeData, toast} from '../../utils';
 
 export const signInAction = (form, navigation) => dispatch => {
   dispatch({type: 'SET_LOADING', value: true});
@@ -12,8 +12,8 @@ export const signInAction = (form, navigation) => dispatch => {
       dispatch({type: 'SET_LOADING', value: false});
     })
     .catch(err => {
-      console.log('login error: ', err.response);
       dispatch({type: 'SET_LOADING', value: false});
+      toast(err?.response?.data?.message);
     });
 };
 
