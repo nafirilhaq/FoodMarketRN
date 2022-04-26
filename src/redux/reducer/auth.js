@@ -1,5 +1,5 @@
 const initRegisterState = {
-  name: 'aa',
+  name: '',
   email: '',
   password: '',
   password_confirmation: '',
