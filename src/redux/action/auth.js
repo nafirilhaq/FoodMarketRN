@@ -35,6 +35,16 @@ export const signUpAction = (form, navigation) => dispatch => {
     .catch(err => {
       dispatch({type: 'SET_LOADING', value: false});
       dispatch({type: 'SET_RESET_INVALID'});
+      const countErrors = err.response.data.errors;
+      if (Object.keys(countErrors).length > 1) {
+        toast(err?.response?.data?.message);
+      } else if (countErrors.name) {
+        toast(countErrors.name[0]);
+      } else if (countErrors.email) {
+        toast(countErrors.email[0]);
+      } else if (countErrors.password) {
+        toast(countErrors.password[0]);
+      }
       if (err?.response?.data?.errors?.email) {
         dispatch({type: 'SET_EMAIL_INVALID', value: true});
       }
