@@ -10,10 +10,19 @@ export const signInAction = (form, navigation) => dispatch => {
     .then(res => {
       console.log('login', res.data);
       dispatch({type: 'SET_LOADING', value: false});
+      navigation.replace('MainApp');
     })
     .catch(err => {
       dispatch({type: 'SET_LOADING', value: false});
-      toast(err?.response?.data?.message);
+      console.log('login', err.response);
+      const countErrors = err.response.data.errors;
+      if (Object.keys(countErrors).length > 1) {
+        toast(err?.response?.data?.message);
+      } else if (countErrors.email) {
+        toast(countErrors.email[0]);
+      } else if (countErrors.password) {
+        toast(countErrors.password[0]);
+      }
     });
 };
 
@@ -35,6 +44,7 @@ export const signUpAction = (form, navigation) => dispatch => {
     .catch(err => {
       dispatch({type: 'SET_LOADING', value: false});
       dispatch({type: 'SET_RESET_INVALID'});
+
       const countErrors = err.response.data.errors;
       if (Object.keys(countErrors).length > 1) {
         toast(err?.response?.data?.message);
@@ -45,6 +55,7 @@ export const signUpAction = (form, navigation) => dispatch => {
       } else if (countErrors.password) {
         toast(countErrors.password[0]);
       }
+
       if (err?.response?.data?.errors?.email) {
         dispatch({type: 'SET_EMAIL_INVALID', value: true});
       }
@@ -75,10 +86,31 @@ export const signUpAddressAction = (form, navigation) => dispatch => {
       },
     })
       .then(res => {
-        console.log('sukses', res);
+        navigation.replace('SignUpPhoto');
       })
       .catch(err => {
         console.log('gagal', err.response);
+      });
+  });
+};
+
+export const uploadPhotoAction = (data, navigation) => dispatch => {
+  const formPhoto = new FormData();
+  formPhoto.append('file', data);
+  console.log('formdata', data.uri);
+
+  getData('token').then(token => {
+    Axios.post(`${API_HOST}/user/photo`, data.uri, {
+      headers: {
+        Authorization: token.value,
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+      .then(photoRes => {
+        console.log('upload success', photoRes);
+      })
+      .catch(err => {
+        console.log('upload gagal', err.response);
       });
   });
 };

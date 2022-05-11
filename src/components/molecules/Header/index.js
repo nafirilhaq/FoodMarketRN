@@ -1,9 +1,9 @@
-import {StyleSheet, TouchableOpacity, Text, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, Text, View, Image} from 'react-native';
 import React from 'react';
 import {colors, fonts} from '../../../utils';
-import {IcBack} from '../../../assets';
+import {DummyProfile, IcBack} from '../../../assets';
 
-const Header = ({title, subTitle, onBack}) => {
+const Header = ({title, subTitle, onBack, onProfile}) => {
   return (
     <View style={styles.container}>
       {onBack ? (
@@ -17,6 +17,13 @@ const Header = ({title, subTitle, onBack}) => {
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.subTitle}>{subTitle}</Text>
       </View>
+      {onProfile ? (
+        <View>
+          <Image style={styles.avatarWrapper} source={DummyProfile} />
+        </View>
+      ) : (
+        <></>
+      )}
     </View>
   );
 };
@@ -29,10 +36,14 @@ const styles = StyleSheet.create({
     padding: 24,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   backWrapper: {
     padding: 24,
     marginLeft: -24,
+  },
+  wrapper: {
+    flex: 1,
   },
   title: {
     fontSize: 22,
@@ -43,5 +54,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: fonts.light,
     color: colors.text.gray,
+  },
+  avatarWrapper: {
+    width: 50,
+    height: 50,
+    borderRadius: 8,
   },
 });
