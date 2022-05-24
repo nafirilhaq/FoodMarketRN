@@ -8,7 +8,10 @@ export const signInAction = (form, navigation) => dispatch => {
   dispatch({type: 'SET_LOADING', value: true});
   Axios.post(`${API_HOST}/login`, form)
     .then(res => {
-      console.log('login', res.data);
+      const profile = res.data.data.user;
+      const token = `${res.data.data.token_type} ${res.data.data.access_token}`;
+      storeData('profile', profile);
+      storeData('token', {value: token});
       dispatch({type: 'SET_LOADING', value: false});
       navigation.replace('MainApp');
     })
@@ -77,18 +80,19 @@ export const signUpAddressAction = (form, navigation) => dispatch => {
     const bodyFormData = new FormData();
     bodyFormData.append('address', 'bandung');
 
+    dispatch({type: 'SET_LOADING', value: true});
     console.log('formdatta', bodyFormData);
     Axios.post(`${API_HOST}/user`, form, {
       headers: {
         Authorization: token.value,
-        'Content-Type': 'multipart/form-data',
-        'Content-Lenght': 10,
       },
     })
       .then(res => {
+        dispatch({type: 'SET_LOADING', value: false});
         navigation.replace('SignUpPhoto');
       })
       .catch(err => {
+        dispatch({type: 'SET_LOADING', value: false});
         console.log('gagal', err.response);
       });
   });
@@ -97,10 +101,9 @@ export const signUpAddressAction = (form, navigation) => dispatch => {
 export const uploadPhotoAction = (data, navigation) => dispatch => {
   const formPhoto = new FormData();
   formPhoto.append('file', data);
-  console.log('formdata', data.uri);
 
   getData('token').then(token => {
-    Axios.post(`${API_HOST}/user/photo`, data.uri, {
+    Axios.post(`${API_HOST}/user/photo`, formPhoto, {
       headers: {
         Authorization: token.value,
         'Content-Type': 'multipart/form-data',

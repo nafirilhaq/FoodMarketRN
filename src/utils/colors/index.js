@@ -9,6 +9,7 @@ export const colors = {
   text: {
     black: '#020202',
     white: '#FFF',
+    white2: '#F9FAFF',
     gray: '#8D92A3',
   },
   button: {

@@ -1,24 +1,31 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
-import {DummyFood, ILStarOn} from '../../../assets';
+import {DummyFood, ILStarOff, ILStarOn} from '../../../assets';
 import {colors, fonts} from '../../../utils';
 import {Gap} from '../../atoms';
 
-const FoodCard = () => {
+const FoodCard = ({image, title, rating, onPress}) => {
+  const Rating = () => {
+    let star = [];
+    for (let i = 0; i < 5; i++) {
+      if (i < rating) {
+        star.push(<ILStarOn key={i} />);
+      } else {
+        star.push(<ILStarOff key={i} />);
+      }
+    }
+    return star;
+  };
   return (
-    <View style={styles.container}>
-      <Image source={DummyFood} style={styles.foodImage} />
-      <Text style={styles.title}>Cheery</Text>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
+      <Image source={image} style={styles.foodImage} />
+      <Text style={styles.title}>{title}</Text>
       <View style={styles.ratingWrapper}>
         <Gap width={12} />
-        <ILStarOn />
-        <ILStarOn />
-        <ILStarOn />
-        <ILStarOn />
-        <ILStarOn />
-        <Text style={styles.rating}>4.5</Text>
+        <Rating />
+        <Text style={styles.rating}>{rating}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -35,6 +42,9 @@ const styles = StyleSheet.create({
   foodImage: {
     width: 200,
     height: 140,
+    resizeMode: 'cover',
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
   },
   title: {
     fontSize: 16,

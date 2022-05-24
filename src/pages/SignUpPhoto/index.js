@@ -7,7 +7,7 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {uploadPhotoAction} from '../../redux/action/auth';
 import {useDispatch} from 'react-redux';
 
-const SignUpPhoto = () => {
+const SignUpPhoto = ({navigation}) => {
   const [profile, setProfile] = useState({});
   const [photo, setPhoto] = useState(ILPhotoEmpty);
   const [hasPhoto, setHasPhoto] = useState(false);
@@ -38,9 +38,9 @@ const SignUpPhoto = () => {
           setPhoto({uri: callback.assets[0].uri});
           setHasPhoto(true);
           setPhotoData({
-            name: callback.assets[0].fileName,
-            type: callback.assets[0].type,
             uri: callback.assets[0].uri,
+            type: callback.assets[0].type,
+            name: callback.assets[0].fileName,
           });
         }
       },
@@ -54,6 +54,10 @@ const SignUpPhoto = () => {
 
   const onSubmit = () => {
     dispatch(uploadPhotoAction(photoData));
+  };
+
+  const onSkip = () => {
+    navigation.replace('Home');
   };
 
   return (
@@ -79,7 +83,7 @@ const SignUpPhoto = () => {
       <View style={styles.buttonWrapper}>
         <Button text="Upload and Continue" onPress={onSubmit} />
         <Gap height={30} />
-        <Button isLink text="Skip for this" />
+        <Button isLink text="Skip for this" onPress={onSkip} />
       </View>
     </View>
   );
@@ -112,6 +116,7 @@ const styles = StyleSheet.create({
     width: 110,
     height: 110,
     borderRadius: 110,
+    resizeMode: 'cover',
   },
   actionButton: {
     position: 'absolute',

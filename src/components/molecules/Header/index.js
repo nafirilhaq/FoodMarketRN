@@ -2,12 +2,16 @@ import {StyleSheet, TouchableOpacity, Text, View, Image} from 'react-native';
 import React from 'react';
 import {colors, fonts} from '../../../utils';
 import {DummyProfile, IcBack} from '../../../assets';
+import {useNavigation} from '@react-navigation/native';
 
-const Header = ({title, subTitle, onBack, onProfile}) => {
+const Header = ({title, subTitle, onBack, onProfile, avatar}) => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       {onBack ? (
-        <TouchableOpacity style={styles.backWrapper}>
+        <TouchableOpacity
+          style={styles.backWrapper}
+          onPress={() => navigation.goBack()}>
           <IcBack />
         </TouchableOpacity>
       ) : (
@@ -19,7 +23,7 @@ const Header = ({title, subTitle, onBack, onProfile}) => {
       </View>
       {onProfile ? (
         <View>
-          <Image style={styles.avatarWrapper} source={DummyProfile} />
+          <Image style={styles.avatarWrapper} source={{uri: avatar}} />
         </View>
       ) : (
         <></>

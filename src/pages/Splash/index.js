@@ -1,12 +1,19 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect} from 'react';
 import {ILLogo} from '../../assets';
-import {colors, fonts} from '../../utils';
+import {colors, fonts, getData} from '../../utils';
 
 const Splash = ({navigation}) => {
   useEffect(() => {
     setTimeout(() => {
-      navigation.replace('SignIn');
+      getData('token').then(res => {
+        if (res) {
+          navigation.replace('MainApp');
+        } else {
+          navigation.replace('SignIn');
+        }
+        console.log('login', res);
+      });
     }, 2000);
   }, []);
   return (
